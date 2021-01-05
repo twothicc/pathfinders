@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function Node(props) {
-    const [pathstate, setPathstate] = useState(props.path);
-    const [side] = useState(props.side);
+    const [pathstate, setPathstate] = useState(props.path)
+    const side = props.side;
     
+    useEffect(() => {
+        setPathstate(props.path);
+    }, [props.path])
 
     //handleSpecialNode has to be implemented in both drag and click
     function handlePathDrag(event) {
@@ -11,17 +14,17 @@ function Node(props) {
         event.preventDefault();
         if (props.ismousedown) {
             if (props.clickstate === '0' || props.clickstate === '3') {
-                setPathstate(parseInt(props.clickstate));
+                setAndUpdatePathstate(parseInt(props.clickstate));
                 props.handleSpecialNode(parseInt(props.clickstate), 'close');
                 props.setSpecialNode(parseInt(props.clickstate), props.id);
             } else {
                 if (event.target.attributes.path.value === '0' || event.target.attributes.path.value === '3') {
                     props.handleSpecialNode(parseInt(props.clickstate), 'open')
                     props.setSpecialNode(parseInt(event.target.attributes.path.value), null);
-                    setPathstate(parseInt(props.clickstate));
+                    setAndUpdatePathstate(parseInt(props.clickstate));
                     
                 } else {
-                    setPathstate(parseInt(props.clickstate));
+                    setAndUpdatePathstate(parseInt(props.clickstate));
                 }
             }
         } else {}
@@ -30,19 +33,24 @@ function Node(props) {
     function handlePathClick(event) {
         event.preventDefault();
         if (props.clickstate === '0' || props.clickstate === '3') {
-            setPathstate(parseInt(props.clickstate));
+            setAndUpdatePathstate(parseInt(props.clickstate));
             props.handleSpecialNode(parseInt(props.clickstate), 'close');
             props.setSpecialNode(parseInt(props.clickstate), props.id);
         } else {
             if (event.target.attributes.path.value === '0' || event.target.attributes.path.value === '3') {
                 props.handleSpecialNode(parseInt(event.target.attributes.path.value), 'open')
                 props.setSpecialNode(parseInt(event.target.attributes.path.value), null);
-                setPathstate(parseInt(props.clickstate));
+                setAndUpdatePathstate(parseInt(props.clickstate));
             } else {
-                setPathstate(parseInt(props.clickstate));
+                setAndUpdatePathstate(parseInt(props.clickstate));
             }
         }
 
+    }
+
+    function setAndUpdatePathstate(state) {
+        setPathstate(state);
+        props.updateGrid(props.id, state);
     }
 
     //console.log('clickstate is now ' + props.clickstate)
@@ -52,7 +60,7 @@ function Node(props) {
                 <div
                     id = {props.id}
                     path = {pathstate}
-                    style = {{height: `${600/side}px`, width: `${600/side}px`, backgroundColor: 'DarkGreen', outline: `${600/(side * 10)}px solid white`}}
+                    style = {{height: `${side}px`, width: `${side}px`, backgroundColor: 'DarkGreen', outline: `${side / 10}px solid white`}}
                     onMouseEnter = {handlePathDrag}
                     onClick = {handlePathClick}
                 />
@@ -62,7 +70,7 @@ function Node(props) {
                 <div 
                     id = {props.id}
                     path = {pathstate}
-                    style = {{height: `${600/side}px`, width: `${600/side}px`, backgroundColor: 'AliceBlue', outline: `${600/(side * 10)}px solid white`}}
+                    style = {{height: `${side}px`, width: `${side}px`, backgroundColor: 'AliceBlue', outline: `${side / 10}px solid white`}}
                     onMouseEnter = {handlePathDrag}
                     onClick = {handlePathClick}
                 />
@@ -72,7 +80,7 @@ function Node(props) {
                 <div 
                     id = {props.id}
                     path = {pathstate}
-                    style = {{height: `${600/side}px`, width: `${600/side}px`, backgroundColor: 'blue', outline: `${600/(side * 10)}px solid white`}}
+                    style = {{height: `${side}px`, width: `${side}px`, backgroundColor: 'blue', outline: `${side / 10}px solid white`}}
                     onMouseEnter = {handlePathDrag}
                     onClick = {handlePathClick}
                 />
@@ -82,7 +90,17 @@ function Node(props) {
                 <div 
                     id = {props.id}
                     path = {pathstate}
-                    style = {{height: `${600/side}px`, width: `${600/side}px`, backgroundColor: 'DarkRed', outline: `${600/(side * 10)}px solid white`}}
+                    style = {{height: `${side}px`, width: `${side}px`, backgroundColor: 'DarkRed', outline: `${side / 10}px solid white`}}
+                    onMouseEnter = {handlePathDrag}
+                    onClick = {handlePathClick}
+                />
+            )
+        case 4:
+            return (
+                <div
+                    id = {props.id}
+                    path = {pathstate}
+                    style = {{height: `${side}px`, width: `${side}px`, backgroundColor: 'black', outline: `${side / 10}px solid aliceblue`}}
                     onMouseEnter = {handlePathDrag}
                     onClick = {handlePathClick}
                 />
