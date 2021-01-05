@@ -4,8 +4,8 @@ import Node from './Node';
 
 function Grid(props) {
     const [grid, setGrid] = useState([]);
-    const [side, setSide] = useState(16);
-    const [formside, setFormside] = useState(16);
+    const [side, setSide] = useState(24);
+    const [formside, setFormside] = useState(24);
     const [clickstate, setClickstate] = useState(1);
     const [ismousedown, setMousedown] = useState(false);
     const [startcoord, setStartcoord] = useState(null);
@@ -69,68 +69,65 @@ function Grid(props) {
     }
 
     function findpath(curr, target) {
-        console.log(curr + ' and ' + target)
-        //check if curr is equal to end
-        if (curr[0] === target[0] && curr[1] === target[1]) {
-            console.log('exit found at ' + curr);
-        } else {
-            //up down left right
-            const paths = [curr[1] - 1, curr[1] + 1, curr[0] - 1, curr[0] + 1];
-            var closed_options = 0;
-            //check if paths can be taken
-            for (let i = 0; i < paths.length; i = i + 1) {
-                paths[i] = [paths[i] >= 0, paths[i]];
-            }
-            
-            //first two are edits made to the y coord, so just add on the x coord
-            for (let i = 0; i < 2; i = i + 1) {
-                if (paths[i][0]) {
-                    if (curr[0] === target[0] && paths[i][1] === target[1]) {
-                        console.log('exit found at ' + [curr[0], paths[i][1]]);
-                    } else {
-                        if (grid[paths[i][1]][curr[0]][1] === 1) {
-                            let new_curr = [curr[0], paths[i][1]];
-                            
-                            setTimeout(() => {
-                                changeNodeState(new_curr);
-                                findpath(new_curr, target);
-                            }, 250);
-                            
-                        } else {
-                            closed_options += 1;
-                        }
-                    }
+        //console.log(curr + ' and ' + target)
+        
+        //up down left right
+        const paths = [curr[1] - 1, curr[1] + 1, curr[0] - 1, curr[0] + 1];
+        var closed_options = 0;
+        //check if paths can be taken
+        for (let i = 0; i < paths.length; i = i + 1) {
+            paths[i] = [paths[i] >= 0, paths[i]];
+        }
+        
+        //first two are edits made to the y coord, so just add on the x coord
+        for (let i = 0; i < 2; i = i + 1) {
+            if (paths[i][0]) {
+                if (curr[0] === target[0] && paths[i][1] === target[1]) {
+                    console.log('exit found at ' + [curr[0], paths[i][1]]);
                 } else {
-                    closed_options += 1;
-                }
-            }
-            //last two are edits made to x coord, so just add on the y coord
-            for (let i = 2; i < 4; i = i + 1) {
-                if (paths[i][0]) {
-                    if (paths[i][1] === target[0] && curr[1] === target[1]) {
-                        console.log('exit found at ' + [paths[i][1], curr[1]]);
+                    if (grid[paths[i][1]][curr[0]][1] === 1) {
+                        let new_curr = [curr[0], paths[i][1]];
+                        
+                        setTimeout(() => {
+                            changeNodeState(new_curr);
+                            findpath(new_curr, target);
+                        }, 100);
+                        
                     } else {
-                        if (grid[curr[1]][paths[i][1]][1] === 1) {
-                            let new_curr = [paths[i][1], curr[1]];
-                            
-                            
-                            setTimeout(() => {
-                                changeNodeState(new_curr);
-                                findpath(new_curr, target);
-                            }, 250);
-                        } else {
-                            closed_options += 1;
-                        }
+                        closed_options += 1;
                     }
-                } else {
-                    closed_options += 1;
                 }
-            }
-
-            if (closed_options === 4) {
-                console.log('path ended at ' + curr);
+            } else {
+                closed_options += 1;
             }
         }
+        //last two are edits made to x coord, so just add on the y coord
+        for (let i = 2; i < 4; i = i + 1) {
+            if (paths[i][0]) {
+                if (paths[i][1] === target[0] && curr[1] === target[1]) {
+                    console.log('exit found at ' + [paths[i][1], curr[1]]);
+                } else {
+                    if (grid[curr[1]][paths[i][1]][1] === 1) {
+                        let new_curr = [paths[i][1], curr[1]];
+                        
+                        
+                        setTimeout(() => {
+                            changeNodeState(new_curr);
+                            findpath(new_curr, target);
+                        }, 100);
+                    } else {
+                        closed_options += 1;
+                    }
+                }
+            } else {
+                closed_options += 1;
+            }
+        }
+
+        if (closed_options === 4) {
+            console.log('path ended at ' + curr);
+        }
+        
     }
 
 
@@ -213,6 +210,13 @@ function Grid(props) {
         setGrid(temp);
         
         setSide(formside);
+
+        setStartcoord(null);
+        setEndcoord(null);
+        setStartset(false);
+        setEndset(false);
+
+        console.log('resetStartEndNodes');
         
     }
 
@@ -225,8 +229,10 @@ function Grid(props) {
         
         <div style = {{display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', height: 'auto'}}>
             <h1 style = {{textAlign: 'center'}}>Pathfinder</h1>
-            <TextField type = 'number' label = 'adjust sides' value = {formside} onChange = {handleFormsideChange}/>
-            <Button variant = 'outlined' style = {{backgroundColor: 'aliceblue'}} onClick = {handleSideChange}>Change Side</Button>
+            <div style = {{display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%', height: 'auto', justifyContent: 'center', marginBottom: '1%'}}>
+                <TextField type = 'number' label = 'adjust sides' value = {formside} onChange = {handleFormsideChange}/>
+                <Button variant = 'outlined' style = {{backgroundColor: 'aliceblue'}} onClick = {handleSideChange}>Change Side</Button>
+            </div>
             <div style = {{display: 'flex', flexDirection: 'row', justifyContent: 'center', width: '100%', height: 'auto', marginTop: '2%', marginBottom: '2%'}}>
                 {!isstartset
                     ? <Button id = {0} onClick = {handleSwitchNode} variant = 'outlined' style = {{marginInline: '1%', backgroundColor: 'aliceblue'}}>Start Node</Button>

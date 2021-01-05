@@ -80,7 +80,7 @@ function Node(props) {
                 <div 
                     id = {props.id}
                     path = {pathstate}
-                    style = {{height: `${side}px`, width: `${side}px`, backgroundColor: 'blue', outline: `${side / 10}px solid white`}}
+                    style = {{height: `${side}px`, width: `${side}px`, backgroundColor: 'black', outline: `${side / 10}px solid white`}}
                     onMouseEnter = {handlePathDrag}
                     onClick = {handlePathClick}
                 />
@@ -100,7 +100,7 @@ function Node(props) {
                 <div
                     id = {props.id}
                     path = {pathstate}
-                    style = {{height: `${side}px`, width: `${side}px`, backgroundColor: 'black', outline: `${side / 10}px solid aliceblue`}}
+                    style = {{height: `${side}px`, width: `${side}px`, backgroundColor: 'deepskyblue', outline: `${side / 10}px solid aliceblue`}}
                     onMouseEnter = {handlePathDrag}
                     onClick = {handlePathClick}
                 />
