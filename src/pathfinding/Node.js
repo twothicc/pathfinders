@@ -19,7 +19,7 @@ function Node(props) {
                 props.setSpecialNode(parseInt(props.clickstate), props.id);
             } else {
                 if (event.target.attributes.path.value === '0' || event.target.attributes.path.value === '3') {
-                    props.handleSpecialNode(parseInt(props.clickstate), 'open')
+                    props.handleSpecialNode(parseInt(event.target.attributes.path.value), 'open')
                     props.setSpecialNode(parseInt(event.target.attributes.path.value), null);
                     setAndUpdatePathstate(parseInt(props.clickstate));
                     
@@ -101,6 +101,16 @@ function Node(props) {
                     id = {props.id}
                     path = {pathstate}
                     style = {{height: `${side}px`, width: `${side}px`, backgroundColor: 'deepskyblue', outline: `${side / 10}px solid aliceblue`}}
+                    onMouseEnter = {handlePathDrag}
+                    onClick = {handlePathClick}
+                />
+            )
+        case 5:
+            return (
+                <div
+                    id = {props.id}
+                    path = {pathstate}
+                    style = {{height: `${side}px`, width: `${side}px`, backgroundColor: 'greenyellow', outline: `${side / 10}px solid white`}}
                     onMouseEnter = {handlePathDrag}
                     onClick = {handlePathClick}
                 />
