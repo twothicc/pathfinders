@@ -2,16 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import Grid from './pathfinding/Grid'
-import {BrowserRouter, Switch} from 'react-router-dom';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <BrowserRouter>
     <Switch>
+      <Route exact path='/pathfinders' component={Grid}/>
     </Switch>
-    <React.StrictMode>
+    {/* <React.StrictMode>
       <Grid />
-    </React.StrictMode>
+    </React.StrictMode> */}
   </BrowserRouter>,
   document.getElementById('root')
 );
